@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClinicGallery;
-use App\Models\ClinicService;
 use App\Models\Doctor;
+use App\Models\Service;
+use App\Models\Testimonial;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -15,14 +15,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $doctors = Doctor::active()->get();
-        $services = ClinicService::active()->orderBy('sort_order')->get();
-        $gallery = ClinicGallery::active()->orderBy('sort_order')->limit(8)->get();
-
+        $featuredServices = Service::featured()->take(4)->get();
+        $featuredDoctors = Doctor::featured()->take(3)->get();
+        $featuredTestimonials = Testimonial::featured()->take(6)->get();
+        
         return Inertia::render('welcome', [
-            'doctors' => $doctors,
-            'services' => $services,
-            'gallery' => $gallery,
+            'featuredServices' => $featuredServices,
+            'featuredDoctors' => $featuredDoctors,
+            'featuredTestimonials' => $featuredTestimonials,
         ]);
     }
 }

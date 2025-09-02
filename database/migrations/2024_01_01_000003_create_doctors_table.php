@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
-            $table->string('specialization');
-            $table->text('bio')->nullable();
-            $table->string('photo')->nullable();
-            $table->json('working_hours')->nullable(); // JSON structure for weekly schedule
-            $table->boolean('is_active')->default(true);
+            $table->string('name')->comment('Doctor full name');
+            $table->string('title')->comment('Professional title (Dr.)');
+            $table->string('specialization')->comment('Medical specialization');
+            $table->text('description')->nullable()->comment('Doctor description or philosophy');
+            $table->text('experience')->nullable()->comment('Work experience as JSON');
+            $table->text('education')->nullable()->comment('Educational background as JSON');
+            $table->text('schedule')->nullable()->comment('Weekly practice schedule as JSON');
+            $table->string('photo')->nullable()->comment('Profile photo path');
+            $table->boolean('featured')->default(false)->comment('Show on home page');
+            $table->integer('order')->default(0)->comment('Display order');
             $table->timestamps();
             
-            $table->index('name');
-            $table->index('email');
-            $table->index('is_active');
-            $table->index(['is_active', 'created_at']);
+            $table->index('featured');
+            $table->index(['featured', 'order']);
         });
     }
 

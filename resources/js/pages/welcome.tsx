@@ -1,242 +1,286 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
-import { usePage } from '@inertiajs/react';
-import { SharedData } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { AppShell } from '@/components/app-shell';
 
 interface Doctor {
     id: number;
     name: string;
     specialization: string;
-    bio: string;
-    photo: string | null;
+    description: string;
+    photo?: string;
 }
 
 interface Service {
     id: number;
     name: string;
+    slug: string;
     description: string;
-    price: number | null;
+    icon: string;
+    price_from: number;
 }
 
-interface GalleryItem {
+interface Testimonial {
     id: number;
-    title: string;
-    description: string | null;
-    image_path: string;
+    patient_name: string;
+    content: string;
+    service_received: string;
+    rating: number;
 }
 
 interface Props {
-    doctors: Doctor[];
-    services: Service[];
-    gallery: GalleryItem[];
+    featuredServices: Service[];
+    featuredDoctors: Doctor[];
+    featuredTestimonials: Testimonial[];
     [key: string]: unknown;
 }
 
-export default function Welcome({ doctors, services, gallery }: Props) {
-    const { auth } = usePage<SharedData>().props;
-
+export default function Welcome({ featuredServices, featuredDoctors, featuredTestimonials }: Props) {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-            {/* Header */}
-            <header className="bg-white shadow-sm border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-4">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">🦷</span>
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-gray-900">DentalCare Clinic</h1>
-                                <p className="text-sm text-gray-600">Professional Dental Services</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            {auth.user ? (
-                                <>
-                                    <Link
-                                        href="/dashboard"
-                                        className="text-gray-600 hover:text-blue-600 font-medium"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                    <Link
-                                        href="/appointments/create"
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                                    >
-                                        Book Appointment
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <Link
-                                        href="/login"
-                                        className="text-gray-600 hover:text-blue-600 font-medium"
-                                    >
-                                        Login
-                                    </Link>
-                                    <Link
-                                        href="/register"
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                                    >
-                                        Register
-                                    </Link>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </header>
-
+        <AppShell>
+            <Head title="Klinik Gigi Modern - Senyum Sehat dan Percaya Diri" />
+            
             {/* Hero Section */}
-            <section className="relative py-20 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center">
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                            🦷 Smile with Confidence
-                        </h1>
-                        <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                            Klinik gigi modern dengan layanan terpercaya untuk kesehatan gigi dan mulut Anda. 
-                            Dipercaya oleh ribuan pasien untuk perawatan gigi berkualitas tinggi.
+            <div className="relative bg-gradient-to-r from-teal-600 to-blue-600 text-white">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="relative container mx-auto px-4 py-20 text-center">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                        🦷 Senyum Sehat dan Percaya Diri<br />Dimulai di Sini
+                    </h1>
+                    <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
+                        Klinik gigi modern dengan teknologi terdepan dan tim dokter berpengalaman untuk perawatan gigi terbaik Anda
+                    </p>
+                    <Link
+                        href="/testimonials/create"
+                        className="inline-flex items-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-lg transition-colors duration-200"
+                    >
+                        📅 Buat Janji Temu Online
+                    </Link>
+                </div>
+            </div>
+
+            {/* Introduction Section */}
+            <div className="py-16 bg-white">
+                <div className="container mx-auto px-4 text-center max-w-4xl">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                        🏥 Tentang Klinik Kami
+                    </h2>
+                    <div className="text-lg text-gray-600 space-y-4">
+                        <p>
+                            Kami berkomitmen memberikan pelayanan kesehatan gigi terbaik dengan menggabungkan teknologi modern, 
+                            fasilitas yang nyaman, dan tim medis yang berpengalaman. Setiap pasien adalah prioritas utama kami.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            {auth.user ? (
-                                <Link
-                                    href="/appointments/create"
-                                    className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
-                                >
-                                    📅 Book Your Appointment
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link
-                                        href="/register"
-                                        className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
-                                    >
-                                        📅 Book Appointment
-                                    </Link>
-                                    <Link
-                                        href="/login"
-                                        className="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-50 transition"
-                                    >
-                                        👨‍⚕️ Doctor Login
-                                    </Link>
-                                </>
-                            )}
-                        </div>
+                        <p>
+                            Dengan pendekatan yang ramah dan profesional, kami memastikan setiap kunjungan Anda menjadi 
+                            pengalaman yang menyenangkan dan hasil perawatan yang memuaskan.
+                        </p>
+                        <p>
+                            Kepercayaan dan kenyamanan pasien adalah fondasi dari setiap perawatan yang kami berikan. 
+                            Mari wujudkan senyum sehat impian Anda bersama kami.
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Services Section */}
-            <section className="py-16 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Featured Services */}
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">🏥 Our Services</h2>
-                        <p className="text-lg text-gray-600">Comprehensive dental care for all your needs</p>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                            ⭐ Layanan Unggulan Kami
+                        </h2>
+                        <p className="text-lg text-gray-600">
+                            Perawatan gigi berkualitas tinggi dengan teknologi terdepan
+                        </p>
                     </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {featuredServices.map((service) => (
+                            <Link
+                                key={service.id}
+                                href={`/services/${service.slug}`}
+                                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-100"
+                            >
+                                <div className="text-4xl mb-4">{service.icon}</div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">{service.name}</h3>
+                                <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
+                                <div className="text-teal-600 font-semibold">
+                                    Mulai dari Rp {service.price_from.toLocaleString('id-ID')}
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                    
+                    <div className="text-center mt-8">
+                        <Link
+                            href="/services"
+                            className="inline-flex items-center px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                        >
+                            Lihat Semua Layanan →
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Featured Doctors */}
+            <div className="py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                            👨‍⚕️ Tim Dokter Berpengalaman
+                        </h2>
+                        <p className="text-lg text-gray-600">
+                            Dokter spesialis yang siap memberikan perawatan terbaik untuk Anda
+                        </p>
+                    </div>
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {services.slice(0, 6).map((service) => (
-                            <div key={service.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                                <h3 className="text-xl font-semibold text-gray-900 mb-3">{service.name}</h3>
-                                <p className="text-gray-600 mb-4">{service.description}</p>
-                                {service.price && (
-                                    <p className="text-blue-600 font-semibold text-lg">
-                                        Rp {service.price.toLocaleString('id-ID')}
-                                    </p>
-                                )}
+                        {featuredDoctors.map((doctor) => (
+                            <Link
+                                key={doctor.id}
+                                href={`/doctors/${doctor.id}`}
+                                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-100 text-center"
+                            >
+                                <div className="w-24 h-24 mx-auto mb-4 bg-teal-100 rounded-full flex items-center justify-center">
+                                    <span className="text-3xl">👨‍⚕️</span>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">{doctor.name}</h3>
+                                <p className="text-teal-600 font-semibold mb-3">{doctor.specialization}</p>
+                                <p className="text-gray-600 text-sm line-clamp-3">{doctor.description}</p>
+                                <div className="mt-4 text-teal-600 font-semibold">
+                                    Lihat Profil →
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                    
+                    <div className="text-center mt-8">
+                        <Link
+                            href="/doctors"
+                            className="inline-flex items-center px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                        >
+                            🏥 Lihat Tim Kami
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Testimonials */}
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                            💬 Testimoni Pasien
+                        </h2>
+                        <p className="text-lg text-gray-600">
+                            Dengarkan pengalaman pasien yang telah merasakan perawatan kami
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {featuredTestimonials.slice(0, 6).map((testimonial) => (
+                            <div
+                                key={testimonial.id}
+                                className="bg-white p-6 rounded-lg shadow-lg border border-gray-100"
+                            >
+                                <div className="flex items-center mb-4">
+                                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4">
+                                        <span className="text-lg">😊</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900">{testimonial.patient_name}</h4>
+                                        <p className="text-sm text-teal-600">{testimonial.service_received}</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex mb-3">
+                                    {[...Array(5)].map((_, i) => (
+                                        <span
+                                            key={i}
+                                            className={`text-lg ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                        >
+                                            ⭐
+                                        </span>
+                                    ))}
+                                </div>
+                                
+                                <p className="text-gray-600 text-sm italic">
+                                    "{testimonial.content}"
+                                </p>
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* Doctors Section */}
-            <section className="py-16 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">👨‍⚕️ Our Expert Doctors</h2>
-                        <p className="text-lg text-gray-600">Meet our experienced and caring dental professionals</p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {doctors.map((doctor) => (
-                            <div key={doctor.id} className="bg-gray-50 rounded-lg p-6 text-center hover:shadow-md transition">
-                                <div className="w-24 h-24 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                                    {doctor.photo ? (
-                                        <img 
-                                            src={doctor.photo} 
-                                            alt={doctor.name}
-                                            className="w-24 h-24 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-3xl">👨‍⚕️</span>
-                                    )}
-                                </div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">{doctor.name}</h3>
-                                <p className="text-blue-600 font-medium mb-3">{doctor.specialization}</p>
-                                <p className="text-gray-600 text-sm">{doctor.bio}</p>
-                            </div>
-                        ))}
+                    
+                    <div className="text-center mt-8">
+                        <Link
+                            href="/testimonials"
+                            className="inline-flex items-center px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                        >
+                            Lihat Semua Testimoni →
+                        </Link>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Gallery Section */}
-            {gallery.length > 0 && (
-                <section className="py-16 bg-gray-50">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl font-bold text-gray-900 mb-4">🏢 Our Clinic Gallery</h2>
-                            <p className="text-lg text-gray-600">Take a look at our modern facilities</p>
+            {/* Contact Information */}
+            <div className="py-16 bg-teal-600 text-white">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                        <div>
+                            <h3 className="text-xl font-bold mb-4">📍 Alamat Klinik</h3>
+                            <p className="mb-2">Jl. Sehat Sentosa No. 123</p>
+                            <p className="mb-2">Jakarta Selatan 12560</p>
+                            <a 
+                                href="https://maps.google.com" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-orange-300 hover:text-orange-200 underline"
+                            >
+                                Lihat di Google Maps →
+                            </a>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {gallery.map((item) => (
-                                <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                                        <span className="text-4xl">🏥</span>
-                                    </div>
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                                        {item.description && (
-                                            <p className="text-sm text-gray-600">{item.description}</p>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
+                        
+                        <div>
+                            <h3 className="text-xl font-bold mb-4">📞 Kontak</h3>
+                            <p className="mb-2">Telepon: (021) 1234-5678</p>
+                            <p className="mb-2">WhatsApp: 0812-3456-7890</p>
+                            <p>Email: info@klinikgigi.com</p>
                         </div>
-                    </div>
-                </section>
-            )}
-
-            {/* Contact & Info Section */}
-            <section className="py-16 bg-blue-600 text-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="text-center">
-                            <div className="text-4xl mb-4">📍</div>
-                            <h3 className="text-xl font-semibold mb-2">Location</h3>
-                            <p>Jl. Kesehatan No. 123<br />Jakarta Pusat, 10110</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-4xl mb-4">📞</div>
-                            <h3 className="text-xl font-semibold mb-2">Contact</h3>
-                            <p>Phone: (021) 123-4567<br />WhatsApp: +62 812-3456-7890</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-4xl mb-4">🕒</div>
-                            <h3 className="text-xl font-semibold mb-2">Hours</h3>
-                            <p>Mon-Fri: 9:00 AM - 5:00 PM<br />Sat: 9:00 AM - 2:00 PM</p>
+                        
+                        <div>
+                            <h3 className="text-xl font-bold mb-4">⏰ Jam Buka</h3>
+                            <p className="mb-2">Senin - Jumat: 09:00 - 17:00</p>
+                            <p className="mb-2">Sabtu: 09:00 - 14:00</p>
+                            <p>Minggu: Tutup</p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Footer */}
-            <footer className="bg-gray-900 text-gray-400 py-8">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p>&copy; 2024 DentalCare Clinic. All rights reserved.</p>
-                    <p className="mt-2 text-sm">Professional dental care you can trust 🦷</p>
+            {/* CTA Section */}
+            <div className="py-16 bg-orange-500 text-white text-center">
+                <div className="container mx-auto px-4">
+                    <h2 className="text-3xl font-bold mb-4">
+                        🎯 Siap untuk Senyum yang Lebih Sehat?
+                    </h2>
+                    <p className="text-xl mb-8 max-w-2xl mx-auto">
+                        Jangan tunda lagi! Konsultasikan kebutuhan gigi Anda dengan tim dokter berpengalaman kami.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link
+                            href="/testimonials/create"
+                            className="inline-flex items-center px-8 py-4 bg-white text-orange-500 hover:bg-gray-100 font-semibold rounded-lg transition-colors duration-200"
+                        >
+                            📅 Buat Janji Sekarang
+                        </Link>
+                        <Link
+                            href="/services"
+                            className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-orange-500 font-semibold rounded-lg transition-colors duration-200"
+                        >
+                            🔍 Lihat Layanan Kami
+                        </Link>
+                    </div>
                 </div>
-            </footer>
-        </div>
+            </div>
+        </AppShell>
     );
 }

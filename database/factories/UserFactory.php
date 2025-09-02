@@ -26,11 +26,8 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
-            'role' => 'patient',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'is_active' => true,
             'remember_token' => Str::random(10),
         ];
     }
@@ -42,36 +39,6 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
-        ]);
-    }
-
-    /**
-     * Indicate that the user is a doctor.
-     */
-    public function doctor(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'role' => 'doctor',
-        ]);
-    }
-
-    /**
-     * Indicate that the user is an admin.
-     */
-    public function admin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'role' => 'admin',
-        ]);
-    }
-
-    /**
-     * Indicate that the user is inactive.
-     */
-    public function inactive(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'is_active' => false,
         ]);
     }
 }

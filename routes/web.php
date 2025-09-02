@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\Api\AppointmentController as ApiAppointmentController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PricingController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,17 +17,32 @@ Route::get('/health-check', function () {
     ]);
 })->name('health-check');
 
-// Home page with clinic information
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// API routes for AJAX requests
-Route::prefix('api')->group(function () {
-    Route::get('/appointments/available-slots', [ApiAppointmentController::class, 'index']);
+// Public routes for dental clinic
+Route::controller(DoctorController::class)->group(function () {
+    Route::get('/doctors', 'index')->name('doctors.index');
+    Route::get('/doctors/{doctor}', 'show')->name('doctors.show');
 });
 
-// Appointment routes (requires authentication)
-Route::middleware(['auth'])->group(function () {
-    Route::resource('appointments', AppointmentController::class);
+Route::controller(ServiceController::class)->group(function () {
+    Route::get('/services', 'index')->name('services.index');
+    Route::get('/services/{service}', 'show')->name('services.show');
+});
+
+Route::get('/pricing', [PricingController::class, 'index'])->name('services.pricing');
+
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+
+Route::controller(BlogController::class)->group(function () {
+    Route::get('/blog', 'index')->name('blog.index');
+    Route::get('/blog/{article}', 'show')->name('blog.show');
+});
+
+Route::controller(TestimonialController::class)->group(function () {
+    Route::get('/testimonials', 'index')->name('testimonials.index');
+    Route::get('/testimonials/create', 'create')->name('testimonials.create');
+    Route::post('/testimonials', 'store')->name('testimonials.store');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

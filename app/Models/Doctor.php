@@ -4,29 +4,41 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Doctor
  *
  * @property int $id
  * @property string $name
- * @property string $email
- * @property string|null $phone
+ * @property string $title
  * @property string $specialization
- * @property string|null $bio
+ * @property string|null $description
+ * @property string|null $experience
+ * @property string|null $education
+ * @property string|null $schedule
  * @property string|null $photo
- * @property array|null $working_hours
- * @property bool $is_active
+ * @property bool $featured
+ * @property int $order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Appointment> $appointments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DoctorSchedule> $schedules
  * 
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor query()
- * @method static \Illuminate\Database\Eloquent\Builder|Doctor active()
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereEducation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereExperience($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereFeatured($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereSchedule($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereSpecialization($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Doctor featured()
  * @method static \Database\Factories\DoctorFactory factory($count = null, $state = [])
  * 
  * @mixin \Eloquent
@@ -42,13 +54,15 @@ class Doctor extends Model
      */
     protected $fillable = [
         'name',
-        'email',
-        'phone',
+        'title',
         'specialization',
-        'bio',
+        'description',
+        'experience',
+        'education',
+        'schedule',
         'photo',
-        'working_hours',
-        'is_active',
+        'featured',
+        'order',
     ];
 
     /**
@@ -57,36 +71,21 @@ class Doctor extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'working_hours' => 'array',
-        'is_active' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'featured' => 'boolean',
+        'order' => 'integer',
+        'experience' => 'array',
+        'education' => 'array',
+        'schedule' => 'array',
     ];
 
     /**
-     * Get the appointments for the doctor.
-     */
-    public function appointments(): HasMany
-    {
-        return $this->hasMany(Appointment::class);
-    }
-
-    /**
-     * Get the schedules for the doctor.
-     */
-    public function schedules(): HasMany
-    {
-        return $this->hasMany(DoctorSchedule::class);
-    }
-
-    /**
-     * Scope a query to only include active doctors.
+     * Scope a query to only include featured doctors.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive($query)
+    public function scopeFeatured($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('featured', true)->orderBy('order');
     }
 }
